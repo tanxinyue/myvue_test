@@ -6,6 +6,7 @@ import item from '@/components/item'
 import detail from '@/components/detail'
 import mytest from '@/components/mytest'
 import Buycart from '@/components/Buycart'
+import register from '@/components/register'
 
 Vue.use(Router)
 
@@ -39,6 +40,10 @@ var routes = [
           path:'/buy',
           name:'Buycart',
           component:Buycart
+        }, {
+          path:'/register',
+          name:'register',
+          component:register
         }
 ]
 
