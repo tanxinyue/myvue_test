@@ -27,6 +27,22 @@
              <input type="password" v-model="password">
           </td>
         </tr>
+        <tr >
+          <td style="padding: 5px">
+            验证码:
+          </td>
+           <td style="padding: 5px">
+             <input type="text" v-model="code">
+          </td>
+        </tr>
+         <tr >
+          <td style="padding: 5px">
+
+          </td>
+           <td style="padding: 5px">
+             <img @click="change" :src="src" alt="">
+          </td>
+        </tr>
           <tr >
           <td style="padding: 5px">
 
@@ -72,7 +88,9 @@ export default {
       msg: "这是一个变量",
       datas:[{title:'首页',route:{name:'index'}},{title:'注册页面',route:{name:'register'}}],
       username:'',
-      password:''
+      password:'',
+      code:'',
+      src:'http://127.0.0.1:8000/code/'
     }
   },
   components:{
@@ -84,6 +102,10 @@ export default {
 
 },
   methods:{
+    change:function(){
+      var num=Math.ceil(Math.random()*100)
+      this.src=this.src+"?code"+num;
+    },
     reset:function(){
       this.username=''
       this.password=''
@@ -102,6 +124,7 @@ export default {
 
                 new_form.append('username', this.username)
                 new_form.append('password', this.password)
+                new_form.append('code', this.code)
 
                 axios({
                     url: 'http://127.0.0.1:8000/register/',
