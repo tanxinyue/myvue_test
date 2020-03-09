@@ -1,7 +1,7 @@
 <template>
   <div>
 
-     
+
    <section class="header text-center">
 		<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
 			<div class="container"><a class="navbar-brand" href="index.html"><i class="fas fa-shopping-bag primary-color mr-1"></i>美多商城</a>
@@ -121,26 +121,30 @@
 											<span class="emphasis">$49.00</span></div>
 									</li>
 								</ul>
-								
+
 								<a href="cart.html" class="btn btn-lg btn-full-width btn-primary" style="margin: 0;">View Cart</a></div>
 						</li>
+            <ul>
+            <li class="btn btn-lg btn-full-width btn-primary" v-if="this.name!=null">欢迎你{{name}}/ <Butoon @click="logout">登出</Butoon></li>
+            <li class="btn btn-lg btn-full-width btn-primary" v-else><a href="/register" style="text-decoration: none">注册</a>/<a href="/login" style="text-decoration: none">登录</a></li>
+            </ul>
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</section>
-		
+
 		<div id="carousel" class="carousel slide" data-ride="carousel">
-		
-	
+
+
 			<ul class="carousel-indicators">
 				<li data-target="#carousel" data-slide-to="0" class="active"></li>
 				<li data-target="#carousel" data-slide-to="1"></li>
 				<li data-target="#carousel" data-slide-to="2"></li>
 			</ul>
-	
+
 			<div class="carousel-inner">
-			
+
 				<!--Text only with background image-->
 				<div class="carousel-item active">
 					<div class="container slide-textonly">
@@ -151,9 +155,9 @@
 						</div>
 					</div>
 				</div>
-				
-				
-			
+
+
+
 			</div>
 		</div>
 		<section class="collections text-center ">
@@ -180,7 +184,7 @@
 				</div>
 			</div>
     </section>
-    
+
 		<section class="featured-block text-center">
 			<div class="container">
 				<div class="row justify-center">
@@ -196,7 +200,7 @@
 				</div>
 			</div>
 		</section>
-		
+
 		<section class="products text-center">
 			<div class="container">
 				<h3 class="mb-4">Featured Products</h3>
@@ -252,9 +256,9 @@
 				</div>
 			</div>
 		</section>
-		
+
 		<div class="divider"></div>
-		
+
 		<section class="cta text-center">
 			<div class="container">
 				<h3 class="mt-0 mb-4">Sign up now to save 10% on your first order</h3>
@@ -270,22 +274,22 @@
 				</form>
 			</div>
 		</section>
-		
+
 		<footer class="footer">
 
 		<div class="container">
 			@v3u.cn
 		</div>
-		
-		
+
+
 	</footer>
-    
+
   </div>
-  
+
 </template>
 
 
- 
+
 <script>
 
 
@@ -293,22 +297,35 @@ export default {
   data () {
     return {
       msg: "这是一个变量",
+      datas:[{title:'注册',route:{name:'register'}},{title:'登录',route:{name:'Login'}}],
+      name:''
     }
   },
   mounted:function(){
+    this.name=localStorage.getItem('username')
 
-   
-  
+
+
+
+
+
 },
   methods:{
+    logout:function () {
+       localStorage.removeItem('username')
+       this.name=''
+       window.location.href='/'
 
-     
+
+    }
+
+
   }
 }
 
 
 </script>
- 
+
 <style>
 
 

@@ -7,6 +7,7 @@ import detail from '@/components/detail'
 import mytest from '@/components/mytest'
 import Buycart from '@/components/Buycart'
 import register from '@/components/register'
+import Login from '@/components/Login'
 
 Vue.use(Router)
 
@@ -44,7 +45,12 @@ var routes = [
           path:'/register',
           name:'register',
           component:register
+        }, {
+          path:'/login',
+          name:'Login',
+          component:Login
         }
+
 ]
 
 export default new Router({
