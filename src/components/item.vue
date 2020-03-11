@@ -120,7 +120,7 @@
 											<span class="emphasis">$49.00</span></div>
 									</li>
 								</ul>
-								
+
 								<a href="cart.html" class="btn btn-lg btn-full-width btn-primary" style="margin: 0;">View Cart</a></div>
 						</li>
 					</ul>
@@ -128,7 +128,7 @@
 			</div>
 		</nav>
 	</section>
-	
+
 
 	<section class="featured-block text-center">
 		<div class="container">
@@ -162,16 +162,16 @@
 						<option value="2">Medium</option>
 						<option value="3">Large</option>
 					</select>
-					
+
 					<!--Quantity: <input type="text" class="form-control quantity mb-4" name="" value="1">-->
-					
+
 					<a href="#" class="btn btn-full-width btn-lg btn-outline-primary">Add to cart</a></div>
 			</div>
 		</div>
 	</section>
-	
+
 	<div class="divider"></div>
-	
+
 	<section class="products text-center">
 		<div class="container">
 			<h3 class="mb-4">Related Products</h3>
@@ -227,24 +227,23 @@
 			</div>
 		</div>
 	</section>
-	
+
 	<footer class="footer">
 
 		<div class="container">
 			@v3u.cn
 		</div>
-		
-		
-	</footer>	
-    
+
+
+	</footer>
+
   </div>
-  
+
 </template>
 
 
- 
-<script>
 
+<script>
 
 export default {
   data () {
@@ -252,20 +251,21 @@ export default {
       msg: "这是一个变量",
     }
   },
+
   mounted:function(){
 
-   
-  
+
+
 },
   methods:{
 
-     
+
   }
 }
 
 
 </script>
- 
+
 <style>
 
 

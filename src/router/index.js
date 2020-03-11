@@ -8,6 +8,7 @@ import mytest from '@/components/mytest'
 import Buycart from '@/components/Buycart'
 import register from '@/components/register'
 import Login from '@/components/Login'
+import Test from "../components/Test";
 
 Vue.use(Router)
 
@@ -49,7 +50,12 @@ var routes = [
           path:'/login',
           name:'Login',
           component:Login
-        }
+        }, {
+          path:'/my_weibo',
+          name:'Test',
+          component:Test
+        },
+
 
 ]
 
