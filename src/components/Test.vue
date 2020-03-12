@@ -30,8 +30,9 @@
 
 
                 }).then(res => {
-                   alert('欢迎用户'+res.data.uid+'正在跳转......')
-                    localStorage.setItem('username',res.data.uid)
+                   alert('欢迎用户'+res.data.username+'正在跳转......')
+                    localStorage.setItem('username',res.data.username)
+                    localStorage.setItem('uid',res.data.uid)
                     window.location.href='/'
 
 

@@ -302,7 +302,35 @@ export default {
     }
   },
   mounted:function(){
+
+  	// //接收参数
+  	// var sina_id = this.$route.query.sina_id;
+  	// var uid = this.$route.query.uid;
+    //
+  	// console.log(sina_id);
+
+  	// if(sina_id){
+    //
+  	// 	//自动登录
+  	// 	localStorage.setItem("username",sina_id);
+  	// 	localStorage.setItem("uid",uid);
+    //
+  	// }
+    	//接收参数
+  	var ding_id = this.$route.query.ding_id;
+  	var uid = this.$route.query.uid;
+
+  	console.log(ding_id);
+
+  	if(ding_id){
+
+  		//自动登录
+  		localStorage.setItem("username",ding_id);
+  		localStorage.setItem("uid",uid);
+
+  	}
     this.name=localStorage.getItem('username')
+
 
 
 

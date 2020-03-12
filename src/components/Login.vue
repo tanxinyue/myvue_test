@@ -63,7 +63,10 @@
              <br>
 
              <a :href="url"><img src="http://127.0.0.1:8000/static/sina.png" alt="新浪登陆"></a>
-             <img src="http://127.0.0.1:8000/static/dingding.png" alt="钉钉登陆" style="cursor:pointer">
+             <img src="http://127.0.0.1:8000/static/dingding.png" alt="钉钉登陆" style="cursor:pointer" @click="dingding" >
+
+
+
 
           </td>
         </tr>
@@ -134,8 +137,23 @@ export default {
 
 
 
+
 },
   methods:{
+    dingding:function(){
+
+
+
+
+
+  			//组装url
+  			// let url = "https://api.weibo.com/oauth2/authorize?client_id=3440988304&redirect_uri=http://127.0.0.1:8000/md_admin/weibo";
+
+        let url='http://127.0.0.1:8000/ding_url';
+  			//进行跳转
+  			window.location.href = url;
+
+    },
 
     reset:function(){
       this.username=''
