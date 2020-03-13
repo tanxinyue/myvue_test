@@ -125,7 +125,7 @@
 								<a href="cart.html" class="btn btn-lg btn-full-width btn-primary" style="margin: 0;">View Cart</a></div>
 						</li>
             <ul>
-            <li class="btn btn-lg btn-full-width btn-primary" v-if="this.name!=null">欢迎你{{name}}/ <Butoon @click="logout">登出</Butoon></li>
+            <li class="btn btn-lg btn-full-width btn-primary" v-if="this.name!=null">欢迎你 <router-link to="/login">{{name}}</router-link> /<Butoon @click="logout">登出</Butoon></li>
             <li class="btn btn-lg btn-full-width btn-primary" v-else><a href="/register" style="text-decoration: none">注册</a>/<a href="/login" style="text-decoration: none">登录</a></li>
             </ul>
 					</ul>

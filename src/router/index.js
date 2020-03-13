@@ -9,6 +9,10 @@ import Buycart from '@/components/Buycart'
 import register from '@/components/register'
 import Login from '@/components/Login'
 import Test from "../components/Test";
+import  myprofile from "../components/myprofile";
+import  Kaoshi_reg from "../components/Kaoshi_reg";
+import  Kaoshi_log from "../components/Kaoshi_log";
+import  finish from "../components/finish";
 
 Vue.use(Router)
 
@@ -54,7 +58,25 @@ var routes = [
           path:'/my_weibo',
           name:'Test',
           component:Test
+        }, {
+          path:'/profile',
+          name:'myprofile',
+          component:myprofile
+        }, {
+          path:'/ks_reg',
+          name:'Kaoshi_reg',
+          component:Kaoshi_reg
+        }, {
+          path:'/ks_log',
+          name:'Kaoshi_log',
+          component:Kaoshi_log
+        }, {
+          path:'/finish',
+          name:'finish',
+          component:finish
         },
+
+
 
 
 ]
