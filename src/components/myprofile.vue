@@ -1,60 +1,54 @@
 <template>
   <div>
 
-  <myheader></myheader>
-       <br>
-        <Breadcrumb :datas="datas"></Breadcrumb>
+	<myheader></myheader>
 
-
+	<br><br>
+	<!--面包屑导航-->
+	<Breadcrumb :datas='datas'></Breadcrumb>
 
 	<section class="featured-block text-center">
 		<div class="container">
-      <Avater :src="src" :width="150" fit="fill"></Avater>
-			<teble>
-        <tr>
-          <td style="padding: 5px">
-            用户名:
-          </td>
-           <td style="padding: 5px">
-             <input type="text" v-model="username">
-          </td>
-        </tr>
-          <tr >
-          <td style="padding: 5px">
-            密码:
-          </td>
-           <td style="padding: 5px">
-             <input type="password" v-model="password">
-          </td>
-        </tr>
-         <tr >
-          <td style="padding: 5px">
-            头像上传:
+			<Avatar :src='src' :width='150' fit='fill'></Avatar>
+			<table>
+				<tr>
+					<td>
+						密码:
+					</td>
+					<td>
+						<input type="password" v-model='password'>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						确认密码:
+					</td>
+					<td>
+						<input type="password" v-model='password1'>
+					</td>
+				</tr>
 
-          </td>
-           <td style="padding: 5px">
-             <input type="file">
+				<tr>
 
+						<td style="padding: 5px;">
+						<!--图像上传-->
+							头像上传:
+						</td>
+						<td style="padding: 5px;">
+							<input type="file" @click='upload'>
+						</td>
+				</tr>
+					<tr>
+						<td style="padding: 5px;">
 
-          </td>
-        </tr>
-
-
-          <tr >
-          <td style="padding: 5px">
-
-
-          </td>
-           <td style="padding: 5px">
-            <Button @click="upload">提交</Button>&nbsp;&nbsp;
-
-          </td>
-        </tr>
-      </teble>
-
-
-
+						</td>
+						<td style="padding: 5px;">
+							<Button @click='submit'>提交</Button> &nbsp;&nbsp;
+						</td>
+					</tr>
+			</table>
 		</div>
+
 	</section>
 
 
@@ -64,7 +58,7 @@
 	<footer class="footer">
 
 		<div class="container">
-			@tanxinyue.github.io
+			@v3u.cn
 		</div>
 
 
@@ -77,45 +71,104 @@
 
 
 <script>
-  import myheader from "./myheader";
-  import axios from "axios";
+
+// 导包
+import myheader from './myheader.vue';
+import axios from "axios";
+
 
 export default {
-  data() {
+  data () {
     return {
+	   username: "",
+	//   声明面包屑变量
+	  datas: [{title: '首页' ,route:{name: 'index'}},{title:'我的首页'}],
+	  password: '',
+	  password1: '',
+	  src: '',
 
-      datas: [{title: '首页', route: {name: 'index'}}, {title: '我的首页'}],
-      username: '',
-      password: '',
-      password1: '',
-
-      src: ''
 
     }
   },
-  components: {
-    'myheader': myheader
-  },
-  mounted: function () {
+//   注册组件标签
+components:{
+	'myheader': myheader,
+
+},
+  mounted:function(){
 
 
-  },
-  methods: {
-    upload: function (fil) {
-      let file = fil.target.files[0]
-      let param = new FormData();
-      param.append('file', file, file.name)
-      let config = {headers: {'Content_Type': 'multipart/form-data'}}
-      this.axios.post('http://127.0.0.1:8000/uploadfile', param, config).then(res => {
-        alert(res)
-        this.src = 'http://127.0.0.1:8000/static/upload/' + res.data.filename
+
+},
+  methods:{
+	  // 修改提交
+	      submit:function () {
 
 
-      })
+      if(this.password!=this.password1){
+        this.$Message('两次密码一致');
+        return false;
+      }
 
-    }
+
+                let new_form = new FormData()
+                this.username=localStorage.getItem('username')
+                new_form.append('username',this.username)
+                new_form.append('password', this.password)
+
+
+                axios({
+                    url: 'http://127.0.0.1:8000/update/',
+                    method:'post',
+                    data: new_form,
+
+
+                }).then(res => {
+
+                  if(res.data.code==200){
+
+                    this.$Message('修改成功');
+                    //成功后跳转
+                    this.$router.push('/')
+
+                  }
+
+
+
+                })
+
+
+
+
+    },
+
+
+	// 提交注册
+	upload:function(e){
+		// 获取文件对象
+		let file = e.target.files[0];
+
+		// 声明参数
+		let param = new FormData();
+		this.username=localStorage.getItem('username')
+		// 添加文件
+		param.append('file', file);
+		// 添加当前登录的用户
+		param.append('username', this.username);
+		// 声明请求头
+		let config = {headers: {'Content-type': 'mulipart/form-data'}}
+		// 发送请求
+		this.axios.post('http://127.0.0.1:8000/uploadfile/',param, config).then((result) =>{
+			console.log(result);
+				// 赋值操作
+				this.src = 'http://127.0.0.1:8000/static/upload/'+result.data.filename;
+			}
+		)
+
+	},
+
+
   }
-
 }
 
 
@@ -126,6 +179,3 @@ export default {
 
 
 </style>
-
-
-

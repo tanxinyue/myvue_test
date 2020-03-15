@@ -14,6 +14,7 @@ import  Kaoshi_reg from "../components/Kaoshi_reg";
 import  Kaoshi_log from "../components/Kaoshi_log";
 import  finish from "../components/finish";
 
+
 Vue.use(Router)
 
 var routes = [
@@ -74,7 +75,8 @@ var routes = [
           path:'/finish',
           name:'finish',
           component:finish
-        },
+        }
+
 
 
 
