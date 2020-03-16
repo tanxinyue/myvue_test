@@ -38,6 +38,16 @@
 							<input type="file" @click='upload'>
 						</td>
 				</tr>
+        	<tr>
+
+						<td style="padding: 5px;">
+						<!--七牛文件上传-->
+							七牛文件上传:
+						</td>
+						<td style="padding: 5px;">
+							<input type="file" @click='uploadqiniu'>
+						</td>
+				</tr>
 					<tr>
 						<td style="padding: 5px;">
 
@@ -47,6 +57,7 @@
 						</td>
 					</tr>
 			</table>
+      <video :src="src" controls="controls" width="300px" height="300px"></video>
 		</div>
 
 	</section>
@@ -86,6 +97,8 @@ export default {
 	  password: '',
 	  password1: '',
 	  src: '',
+      // 七牛上传凭证
+      uptoken:''
 
 
     }
@@ -96,8 +109,8 @@ components:{
 
 },
   mounted:function(){
-
-
+// 获取uptoken调用函数
+    this.get_uptoken();
 
 },
   methods:{
@@ -166,6 +179,46 @@ components:{
 		)
 
 	},
+    // #获取七牛云凭证
+    get_uptoken(){
+	        this.axios.get('http://127.0.0.1:8000/uptoken/').then((result) =>{
+			console.log(result);
+				// 赋值操作
+            this.uptoken=result.data.token
+
+			}
+		)
+
+    },
+    	uploadqiniu:function(e){
+	        console.log(this.uptoken)
+		// 获取文件对象
+		let file = e.target.files[0];
+
+		// 声明参数
+		let param = new FormData();
+		this.username=localStorage.getItem('username')
+        // 将上传凭证添加参数
+		// 添加文件
+		param.append('file', file);
+		param.append('token', this.uptoken);
+		// 添加当前登录的用户
+		param.append('username', this.username);
+		// 定制化axios
+        const axios_qiniu=this.axios.create({withCredentials:false})
+        // 发送请求
+        axios_qiniu({
+          method: 'POST',
+          url:'http://up-z1.qiniu.com/',
+          data:param,
+          timeout:30000
+
+        }).then(result=>{
+          console.log(result)
+          this.src='http://q79xdrrpr.bkt.clouddn.com/'+result.data.key;
+
+        })
+      },
 
 
   }

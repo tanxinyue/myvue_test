@@ -285,7 +285,7 @@
 
                             </li>
                           <ul>
-            <li  v-if="this.username!=null">欢迎你 <router-link to="/login">{{username}}</router-link> /<Button @click="logout">登出</Button></li>
+            <li  v-if="this.username!=null">欢迎你 <router-link to="/profile">{{username}}</router-link> /<Button @click="logout">登出</Button></li>
             <li  v-else><a href="/register" style="text-decoration: none">注册</a>/<a href="/login" style="text-decoration: none">登录</a></li>
             </ul>
                         </ul>

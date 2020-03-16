@@ -59,11 +59,24 @@ var routes = [
           path:'/my_weibo',
           name:'Test',
           component:Test
-        }, {
+        }, , {
           path:'/profile',
           name:'myprofile',
-          component:myprofile
-        }, {
+          component:myprofile,
+          beforeEnter:(to,from,next)=>{
+            if(localStorage.getItem('username')){
+              console.log('已登录')
+               next();
+            }else {
+              console.log('未登录')
+              next('/login')
+            }
+          }
+
+
+
+        },
+  {
           path:'/ks_reg',
           name:'Kaoshi_reg',
           component:Kaoshi_reg
