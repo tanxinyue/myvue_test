@@ -49,6 +49,17 @@
 						</td>
 				</tr>
 					<tr>
+
+						<td style="padding: 5px;">
+						上传进度:
+						</td>
+						<td style="padding: 5px;">
+							{{loadpercent}}
+              <Progress v-show="loadpercent_int" :percent="loadpercent_int" color="blue"><span slot="title"></span><span slot="text">{{ loadpercent_int }}%</span></Progress>
+
+						</td>
+				</tr>
+					<tr>
 						<td style="padding: 5px;">
 
 						</td>
@@ -57,7 +68,7 @@
 						</td>
 					</tr>
 			</table>
-      <video :src="src" controls="controls" width="300px" height="300px"></video>
+      <video  v-show="videosrc" :src="videosrc" controls="controls" width="300px" height="300px"></video>
 		</div>
 
 	</section>
@@ -98,7 +109,10 @@ export default {
 	  password1: '',
 	  src: '',
       // 七牛上传凭证
-      uptoken:''
+      uptoken:'',
+		videosrc:'',
+		loadpercent:'',
+      loadpercent_int:''
 
 
     }
@@ -111,6 +125,14 @@ components:{
   mounted:function(){
 // 获取uptoken调用函数
     this.get_uptoken();
+    	this.axios.get('http://127.0.0.1:8000/userinfo/',{params:{uid:localStorage.getItem('uid')}}).then((result) =>{
+			console.log(result);
+			 this.videosrc='http://q79xdrrpr.bkt.clouddn.com/'+result.data.img;
+
+
+
+			}
+		)
 
 },
   methods:{
@@ -211,12 +233,35 @@ components:{
           method: 'POST',
           url:'http://up-z1.qiniu.com/',
           data:param,
-          timeout:30000
+          timeout:30000,
+			onUploadProgress:(e)=>{
+          	// 设置总进度对象
+          	var complete=(e.loaded / e.total);
+          	// 安慰剂按钮
+				if(complete<1){
+					this.loadpercent=(complete*100).toFixed(2)+'%'
+					// this.loadpercent=Number((complete * 100).toFixed(2))
+          	this.loadpercent_int = parseInt((complete * 100).toFixed(2));
+				}
+			}
 
         }).then(result=>{
           console.log(result)
           this.src='http://q79xdrrpr.bkt.clouddn.com/'+result.data.key;
+          this.videosrc='http://q79xdrrpr.bkt.clouddn.com/'+result.data.key;
+          // 修改视频地址
+			this.axios.get('http://127.0.0.1:8000/updateuser/',{params:{uid:localStorage.getItem('uid'),img:result.data.key}}).then((result) =>{
+			console.log(result);
 
+
+
+			}
+		);
+
+
+          // 上传成功后，强行百分之百
+          this.loadpercent='100%';
+          this.loadpercent_int =100;
         })
       },
 
