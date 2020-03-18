@@ -55,7 +55,7 @@
 						</td>
 						<td style="padding: 5px;">
 							{{loadpercent}}
-              <Progress v-show="loadpercent_int" :percent="loadpercent_int" color="blue"><span slot="title"></span><span slot="text">{{ loadpercent_int }}%</span></Progress>
+<!--              <Progress v-show="loadpercent_int" :percent="loadpercent_int" color="blue"><span slot="title"></span><span slot="text">{{ loadpercent_int }}%</span></Progress>-->
 
 						</td>
 				</tr>
@@ -112,7 +112,7 @@ export default {
       uptoken:'',
 		videosrc:'',
 		loadpercent:'',
-      loadpercent_int:''
+
 
 
     }
@@ -241,7 +241,7 @@ components:{
 				if(complete<1){
 					this.loadpercent=(complete*100).toFixed(2)+'%'
 					// this.loadpercent=Number((complete * 100).toFixed(2))
-          	this.loadpercent_int = parseInt((complete * 100).toFixed(2));
+          // 	this.loadpercent_int = parseInt((complete * 100).toFixed(2));
 				}
 			}
 
@@ -261,7 +261,7 @@ components:{
 
           // 上传成功后，强行百分之百
           this.loadpercent='100%';
-          this.loadpercent_int =100;
+          // this.loadpercent_int =100;
         })
       },
 

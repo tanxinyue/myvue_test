@@ -196,6 +196,8 @@ export default {
                     //将id和用户名存储到localstorage中
                     localStorage.setItem('username',res.data.username)
                     localStorage.setItem('uid',res.data.uid)
+                    localStorage.setItem('jwt',res.data.jwtpass)
+
                     //成功后跳转
                     this.$router.push('/')
 
