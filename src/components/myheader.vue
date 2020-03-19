@@ -128,11 +128,13 @@
                           <ul>
             <li  v-if="this.username!=null">{{$t('m.welcome')}} <router-link to="/profile">{{username}}</router-link> /<Button @click="logout">{{$t('m.logout')}}</Button></li>
             <li  v-else><a href="/register" style="text-decoration: none">{{$t('m.register')}}</a>/<a href="/login" style="text-decoration: none">{{$t('m.login')}}</a></li>
+                            <h-switch v-model="language" @change="changeLocale">中/英</h-switch>
             </ul>
                         </ul>
 
                     </div>
                 </div>
+
             </nav>
         </section>
     </div>
@@ -144,7 +146,8 @@
         return {
         msg: "这是一个变量",
         username: '',
-
+          // 语言变量
+          language:false
         }
     },
     mounted:function(){
@@ -163,6 +166,26 @@
 
   	}
     this.username=localStorage.getItem('username')
+      // 自动判断
+      if(navigator.language=='zh-CN'){
+        this.$i18n.locale=='cn'
+         this.language=false
+
+      }else{
+        this.$i18n.locale=='en'
+        this.language=true
+      }
+
+      // if(this.username!==''){
+      //
+      //   this.$i18n.locale=localStorage.getItem('language')
+      //   if(this.$i18n.locale=='cn'){
+      //     this.language=false
+      //   }else{
+      //     this.language=true
+      //   }
+      //
+      // }
 
 
 },
@@ -174,7 +197,18 @@
 
 	},changeLocale() {
   let locale = this.$i18n.locale
-  locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'cn'
+      if(this.language==false){
+        locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'cn'
+        localStorage.setItem('language','cn')
+
+
+
+      }else{
+        locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'en'
+        localStorage.setItem('language','en')
+      }
+
+
   // LangStorage.setLang(this.$i18n.locale) //后面会用做切换和将用户习惯存储到本地浏览器
 }
 
