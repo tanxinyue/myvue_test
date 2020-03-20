@@ -15,6 +15,7 @@ import  Kaoshi_log from "../components/Kaoshi_log";
 import  finish from "../components/finish";
 import Aboutpics from "../components/Aboutpics";
 import UpdatePics from "../components/UpdatePics";
+import Kaoshi02 from "../components/Kaoshi02";
 
 
 Vue.use(Router)
@@ -98,7 +99,12 @@ routes = [
      path:'/uppics/:id',
       name:'UpdatePics',
       component:UpdatePics
+    },{
+     path:'/kaoshi02',
+      name:'Kaoshi02',
+      component:Kaoshi02
     }
+
 
 
 ];

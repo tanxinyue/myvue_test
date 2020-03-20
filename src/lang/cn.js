@@ -21,4 +21,6 @@ export const m={
   Featured:'特色产品',
   Product:'产品名称',
   Buy:'立即购买',
+  title:'电影名称',
+  desc:'一部感人电影'
 }

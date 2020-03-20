@@ -21,6 +21,8 @@ export const m={
   Featured:'Featured Items',
   Product:'Product Name',
   Buy:'Buy Now',
+  title:'movie',
+  desc:'aaa'
 
 
 

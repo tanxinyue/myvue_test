@@ -9,35 +9,24 @@
 
 	<section class="featured-block text-center">
 		<div class="container">
-			<Avatar :src='src' :width='150' fit='fill'></Avatar>
-			<table>
+      <table>
 				<tr>
 					<td>
-						密码:
+						标题:
 					</td>
 					<td>
-						<input type="password" v-model='password'>
+						<input type="text" v-model='title'>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						确认密码:
+						简介
 					</td>
 					<td>
-						<input type="password" v-model='password1'>
+						<input type="text" v-model='desc'>
 					</td>
 				</tr>
 
-				<tr>
-
-						<td style="padding: 5px;">
-						<!--图像上传-->
-							头像上传:
-						</td>
-						<td style="padding: 5px;">
-							<input type="file" @click='upload'>
-						</td>
-				</tr>
         	<tr>
 
 						<td style="padding: 5px;">
@@ -55,9 +44,7 @@
 						</td>
 						<td style="padding: 5px;">
 							{{loadpercent}}
-<!--              <Progress v-show="loadpercent_int" :percent="loadpercent_int" color="blue"><span slot="title"></span><span slot="text">{{ loadpercent_int }}%</span></Progress>-->
-
-						</td>
+            </td>
 				</tr>
 					<tr>
 						<td style="padding: 5px;">
@@ -68,6 +55,12 @@
 						</td>
 					</tr>
 			</table>
+      <h-switch v-model="language" @change="changeLocale">中/英</h-switch>
+      <br>
+      {{$t('m.title')}}
+      <br>
+    {{$t('m.desc')}}
+      <br>
       <video  v-show="videosrc" :src="videosrc" controls="controls" width="300px" height="300px" id="video"></video>
       <br>
       <Button color="green" @click="changevideo">{{ mybutton }}</Button>
@@ -107,14 +100,16 @@ export default {
 	   username: "",
 	//   声明面包屑变量
 	  datas: [{title: '首页' ,route:{name: 'index'}},{title:'我的首页'}],
-	  password: '',
-	  password1: '',
-	  src: '',
+	  title: '',
+	  desc: '',
       // 七牛上传凭证
       uptoken:'',
 		videosrc:'',
 		loadpercent:'',
-     mybutton:'进入画中画'
+     mybutton:'进入画中画',
+      title1:'',
+      desc1:'',
+      language:false
 
 
 
@@ -152,69 +147,28 @@ components:{
     },
 	  // 修改提交
 	      submit:function () {
-
-
-      if(this.password!=this.password1){
-        this.$Message('两次密码一致');
-        return false;
-      }
-
-
                 let new_form = new FormData()
-                this.username=localStorage.getItem('username')
-                new_form.append('username',this.username)
-                new_form.append('password', this.password)
+                new_form.append('title',this.title)
+                new_form.append('desc', this.desc)
 
 
                 axios({
-                    url: 'http://127.0.0.1:8000/update/',
+                    url: 'http://127.0.0.1:8000/ksup/',
                     method:'post',
                     data: new_form,
 
 
                 }).then(res => {
 
-                  if(res.data.code==200){
 
-                    this.$Message('修改成功');
-                    //成功后跳转
-                    this.$router.push('/')
 
-                  }
-
+                    this.title1=res.data.title
+                    this.desc1=res.data.desc
 
 
                 })
+        },
 
-
-
-
-    },
-
-
-	// 提交注册
-	upload:function(e){
-		// 获取文件对象
-		let file = e.target.files[0];
-
-		// 声明参数
-		let param = new FormData();
-		this.username=localStorage.getItem('username')
-		// 添加文件
-		param.append('file', file);
-		// 添加当前登录的用户
-		param.append('username', this.username);
-		// 声明请求头
-		let config = {headers: {'Content-type': 'mulipart/form-data'}}
-		// 发送请求
-		this.axios.post('http://127.0.0.1:8000/uploadfile/',param, config).then((result) =>{
-			console.log(result);
-				// 赋值操作
-				this.src = 'http://127.0.0.1:8000/static/upload/'+result.data.filename;
-			}
-		)
-
-	},
     // #获取七牛云凭证
     get_uptoken(){
 	        this.axios.get('http://127.0.0.1:8000/uptoken/').then((result) =>{
@@ -254,8 +208,6 @@ components:{
           	// 安慰剂按钮
 				if(complete<1){
 					this.loadpercent=(complete*100).toFixed(2)+'%'
-					// this.loadpercent=Number((complete * 100).toFixed(2))
-          // 	this.loadpercent_int = parseInt((complete * 100).toFixed(2));
 				}
 			}
 
@@ -275,12 +227,27 @@ components:{
 
           // 上传成功后，强行百分之百
           this.loadpercent='100%';
-          // this.loadpercent_int =100;
+
         })
       },
 
 
-  }
+  },changeLocale() {
+  let locale = this.$i18n.locale
+      if(this.language==false){
+        locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'cn'
+        localStorage.setItem('language','cn')
+
+
+
+      }else{
+        locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'en'
+        localStorage.setItem('language','en')
+      }
+
+
+  // LangStorage.setLang(this.$i18n.locale) //后面会用做切换和将用户习惯存储到本地浏览器
+}
 }
 
 
