@@ -3,33 +3,10 @@
 
 	<myheader></myheader>
 
-	<br><br>
-	<!--面包屑导航-->
-	<Breadcrumb :datas='datas'></Breadcrumb>
-
 	<section class="featured-block text-center">
 		<div class="container">
       <table>
-				<tr>
-					<td>
-						标题:
-					</td>
-					<td>
-						<input type="text" v-model='title'>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						简介
-					</td>
-					<td>
-						<input type="text" v-model='desc'>
-					</td>
-				</tr>
-
-        	<tr>
-
-						<td style="padding: 5px;">
+			  <td style="padding: 5px;">
 						<!--七牛文件上传-->
 							七牛文件上传:
 						</td>
@@ -46,24 +23,17 @@
 							{{loadpercent}}
             </td>
 				</tr>
-					<tr>
-						<td style="padding: 5px;">
-
-						</td>
-						<td style="padding: 5px;">
-							<Button @click='submit'>提交</Button> &nbsp;&nbsp;
-						</td>
-					</tr>
+			
 			</table>
-      <h-switch v-model="language" @change="changeLocale">中/英</h-switch>
+      <h-switch v-model="language" @change="changeLocale">中/英</h-switch> //中英文切换
       <br>
-      {{$t('m.title')}}
+      {{$t('m.title')}}  //电影标题
       <br>
-    {{$t('m.desc')}}
+    {{$t('m.desc')}} //电影简介
       <br>
-      <video  v-show="videosrc" :src="videosrc" controls="controls" width="300px" height="300px" id="video"></video>
+      <video  v-show="videosrc" :src="videosrc" controls="controls" width="300px" height="300px" id="video"></video> //电影播放
       <br>
-      <Button color="green" @click="changevideo">{{ mybutton }}</Button>
+      <Button color="green" @click="changevideo">{{ mybutton }}</Button>  //进入画中画
 		</div>
 
 	</section>
@@ -98,8 +68,6 @@ export default {
   data () {
     return {
 	   username: "",
-	//   声明面包屑变量
-	  datas: [{title: '首页' ,route:{name: 'index'}},{title:'我的首页'}],
 	  title: '',
 	  desc: '',
       // 七牛上传凭证
@@ -117,7 +85,7 @@ export default {
   },
 //   注册组件标签
 components:{
-	'myheader': myheader,
+
 
 },
   mounted:function(){
@@ -145,29 +113,6 @@ components:{
       }
 
     },
-	  // 修改提交
-	      submit:function () {
-                let new_form = new FormData()
-                new_form.append('title',this.title)
-                new_form.append('desc', this.desc)
-
-
-                axios({
-                    url: 'http://127.0.0.1:8000/ksup/',
-                    method:'post',
-                    data: new_form,
-
-
-                }).then(res => {
-
-
-
-                    this.title1=res.data.title
-                    this.desc1=res.data.desc
-
-
-                })
-        },
 
     // #获取七牛云凭证
     get_uptoken(){
@@ -213,8 +158,8 @@ components:{
 
         }).then(result=>{
           console.log(result)
-          this.src='http://q79xdrrpr.bkt.clouddn.com/'+result.data.key;
-          this.videosrc='http://q79xdrrpr.bkt.clouddn.com/'+result.data.key;
+       
+          this.videosrc='http://q79xdrrpr.bkt.clouddn.com/'+result.data.key; //获取视频地址
           // 修改视频地址
 			this.axios.get('http://127.0.0.1:8000/updateuser/',{params:{uid:localStorage.getItem('uid'),img:result.data.key}}).then((result) =>{
 			console.log(result);
@@ -232,21 +177,19 @@ components:{
       },
 
 
-  },changeLocale() {
+  },changeLocale() {  //切换中英文
   let locale = this.$i18n.locale
-      if(this.language==false){
+      if(this.language==false){  //如果language==false则为中文，否则为英文
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'cn'
-        localStorage.setItem('language','cn')
+        localStorage.setItem('language','cn')  //持久存储
 
 
 
       }else{
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'en'
-        localStorage.setItem('language','en')
+        localStorage.setItem('language','en') //持久存储
       }
 
-
-  // LangStorage.setLang(this.$i18n.locale) //后面会用做切换和将用户习惯存储到本地浏览器
 }
 }
 
