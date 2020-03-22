@@ -25,7 +25,11 @@
 				</tr>
 			
 			</table>
+<<<<<<< HEAD
       <h-switch v-model="language" @change="changeLocale">中/英</h-switch> //中英文切换
+=======
+      <h-switch v-model="language" @click="changeLocale()">中/英</h-switch>
+>>>>>>> day15
       <br>
       {{$t('m.title')}}  //电影标题
       <br>
@@ -181,15 +185,29 @@ components:{
   let locale = this.$i18n.locale
       if(this.language==false){  //如果language==false则为中文，否则为英文
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'cn'
+<<<<<<< HEAD
         localStorage.setItem('language','cn')  //持久存储
+=======
+        localStorage.setItem('language','cn')
+        this.language=false
+>>>>>>> day15
 
 
 
       }else{
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'en'
+<<<<<<< HEAD
         localStorage.setItem('language','en') //持久存储
       }
 
+=======
+        localStorage.setItem('language','en')
+        this.language=true
+      }
+
+
+
+>>>>>>> day15
 }
 }
 
