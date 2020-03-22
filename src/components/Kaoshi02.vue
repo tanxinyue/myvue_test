@@ -55,7 +55,7 @@
 						</td>
 					</tr>
 			</table>
-      <h-switch v-model="language" @change="changeLocale">中/英</h-switch>
+      <h-switch v-model="language" @click="changeLocale()">中/英</h-switch>
       <br>
       {{$t('m.title')}}
       <br>
@@ -237,16 +237,18 @@ components:{
       if(this.language==false){
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'cn'
         localStorage.setItem('language','cn')
+        this.language=false
 
 
 
       }else{
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'en'
         localStorage.setItem('language','en')
+        this.language=true
       }
 
 
-  // LangStorage.setLang(this.$i18n.locale) //后面会用做切换和将用户习惯存储到本地浏览器
+
 }
 }
 

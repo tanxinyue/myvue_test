@@ -22,7 +22,7 @@ export const m={
   Product:'Product Name',
   Buy:'Buy Now',
   title:'movie',
-  desc:'aaa'
+  desc:'a movie'
 
 
 
