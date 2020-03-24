@@ -6,6 +6,7 @@
 	<section class="featured-block text-center">
 		<div class="container">
       <table>
+        <tr>
 			  <td style="padding: 5px;">
 						<!--七牛文件上传-->
 							七牛文件上传:
@@ -23,13 +24,13 @@
 							{{loadpercent}}
             </td>
 				</tr>
-			
+
 			</table>
-<<<<<<< HEAD
+
       <h-switch v-model="language" @click="changeLocale()">中/英</h-switch>
-=======
+
       <h-switch v-model="language" @change="changeLocale">中/英</h-switch> //中英文切换
->>>>>>> 54bcd37de166b686c4e31f7028acdc2a3ed1f286
+
       <br>
       {{$t('m.title')}}  //电影标题
       <br>
@@ -162,7 +163,7 @@ components:{
 
         }).then(result=>{
           console.log(result)
-       
+
           this.videosrc='http://q79xdrrpr.bkt.clouddn.com/'+result.data.key; //获取视频地址
           // 修改视频地址
 			this.axios.get('http://127.0.0.1:8000/updateuser/',{params:{uid:localStorage.getItem('uid'),img:result.data.key}}).then((result) =>{
@@ -185,30 +186,30 @@ components:{
   let locale = this.$i18n.locale
       if(this.language==false){  //如果language==false则为中文，否则为英文
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'cn'
-<<<<<<< HEAD
+
         localStorage.setItem('language','cn')
         this.language=false
-=======
+
         localStorage.setItem('language','cn')  //持久存储
->>>>>>> 54bcd37de166b686c4e31f7028acdc2a3ed1f286
+
 
 
 
       }else{
         locale === 'cn' ? this.$i18n.locale = 'en' : this.$i18n.locale = 'en'
-<<<<<<< HEAD
+
         localStorage.setItem('language','en')
         this.language=true
       }
 
 
 
-=======
+
         localStorage.setItem('language','en') //持久存储
       }
 
->>>>>>> 54bcd37de166b686c4e31f7028acdc2a3ed1f286
-}
+
+
 }
 
 

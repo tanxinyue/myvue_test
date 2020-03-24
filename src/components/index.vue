@@ -6,7 +6,7 @@
 
 	</myheader>
 
-		<div id="carousel" class="carousel slide" data-ride="carousel">
+<div id="carousel" class="carousel slide" data-ride="carousel">
 
 
 <!--			<ul class="carousel-indicators">-->
@@ -27,9 +27,9 @@
 <!--						</div>-->
 <!--					</div>-->
 <!--				</div>-->
+3
 <!--        幻灯片组件-->
-        <Carousel :height="700"  :datas="params" @click="click"></Carousel>
-
+            <Carousel :height="700" :datas="params" @click="click" pageTheme="cricle"></Carousel>
 
 
 			</div>
@@ -77,57 +77,59 @@
 
 		<section class="products text-center">
 			<div class="container">
-				<h3 class="mb-4">Featured Products</h3>
+				<h3 class="mb-4">商品展示</h3>
 				<div class="row">
-					<div class="col-sm-6 col-md-3 col-product">
+
+
+<!--             遍历商品列表&ndash;&gt;-->
+					<div  v-for="item in datalist" class="col-sm-6 col-md-3 col-product">
 						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
+							<a :href="'/item?id='+item.id"><img class="rounded-corners img-fluid" :src="' http://127.0.0.1:8000/static/upload/'+item.img+''"	width="240" height="240"></a>
 							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
+								<div class="thumb-overlay"><a :href="'/item?id='+item.id" title=More Info>
 									<i class="fas fa-search-plus"></i>
 								</a></div>
 							</figcaption>
 						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
+						<h4><a :href="'/item?id='+item.id">{{item.name}}</a></h4>
+						<p><span class="emphasis">{{item.price}}</span></p>
+
+
+
 					</div>
-					<div class="col-sm-6 col-md-3 col-product">
-						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
-							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
-									<i class="fas fa-search-plus"></i>
-								</a></div>
-							</figcaption>
-						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
-					</div>
-					<div class="col-sm-6 col-md-3 col-product">
-						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
-							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
-									<i class="fas fa-search-plus"></i>
-								</a></div>
-							</figcaption>
-						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
-					</div>
-					<div class="col-sm-6 col-md-3 col-product">
-						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
-							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
-									<i class="fas fa-search-plus"></i>
-								</a></div>
-							</figcaption>
-						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
-					</div>
+
+<!--          分页逻辑-->
+
+
+
 				</div>
+           <br>
+          <div>
+            <Pagination v-model="pagination" @change="change"></Pagination>
+          </div>
+          <br>
+        <!--自主分页-->
+        <br /><br />
+					<div>
+
+						<a @click="getdata(lastpage)" v-show="lastpage"  >上一页</a>
+
+						<ul>
+
+							<li v-for="index in all">
+
+								<a @click="getdata(index)"  >{{ index }}</a>
+
+							</li>
+
+						</ul>
+
+						<a @click="getdata(nextpage)" v-show="nextpage" >下一页</a>
+</div>
+
+
+
+
 			</div>
 		</section>
 
@@ -158,6 +160,7 @@
 
 	</footer>
 
+
   </div>
 
 </template>
@@ -172,6 +175,14 @@ export default {
     return {
 	  msg: "这是一个变量",
 	  username: '',
+      datalist:[],
+       //自主分页
+      total:0,//商品总数
+      cur:1,//当前页
+      all:0,//总页数
+      lastpage:0,//上一页
+      nextpage:0,//下一页
+      size:2,
 
       // 幻灯片数据
       params:[
@@ -184,7 +195,12 @@ export default {
           link:'',
           image:"https://lokeshdhakar.com/projects/lightbox2/images/image-3.jpg"
         }
-      ]
+      ],
+        pagination:{
+	    page:6,
+        size:3,
+        total:12
+      },
 
     }
   },
@@ -194,6 +210,15 @@ export default {
 
 },
   mounted:function(){
+    this.getdata(1);
+
+      //请求商品接口
+      // 发送请求
+       // 请求商品接口
+    this.axios.get('http://127.0.0.1:8000/goodslist/',{params:{page:1,size:3}}).then((result) =>{
+      console.log(result)
+      this.datalist=result.data.data;
+    });
 	this.username = localStorage.getItem('username')
     	this.axios.get('http://127.0.0.1:8000/showpics/').then((result) =>{
 
@@ -224,6 +249,47 @@ export default {
 
 },
   methods:{
+    // 自主分页接口
+    //自主分页接口
+  	getdata:function(mypage){
+
+
+  		//发送请求
+      this.axios.get('http://127.0.0.1:8000/goodslist/',{params:{page:mypage,size:this.size}}).then((result) =>{
+
+              console.log(result);
+              this.datalist = result.data.data;
+
+              //判断上一页
+              if(mypage==1){
+
+              	this.lastpage = 0;
+
+              }else{
+
+              	this.lastpage = mypage - 1;
+
+              }
+
+              //计算总页数
+              this.all = Math.ceil(result.data.total / this.size);
+
+              //判断下一页
+              if(mypage==this.all){
+
+              	this.nextpage = 0;
+
+              }else{
+
+              	this.nextpage = mypage + 1;
+
+              }
+
+      });
+
+
+
+  	},
 	logout(){
 		localStorage.removeItem('username')
     	this.username=null;
@@ -233,6 +299,18 @@ export default {
 	  console.log(data)
       // 点击后跳转到具体页面
       window.location.href=data.link
+
+    },
+      //分页器事件
+
+  // 分页器事件
+    change:function () {
+	     // 请求商品接口
+    this.axios.get('http://127.0.0.1:8000/goodslist/',{params:{page:this.pagination.page,size:this.pagination.size}}).then((result) =>{
+      console.log(result)
+      this.datalist=result.data.data;
+    });
+
 
     }
 
