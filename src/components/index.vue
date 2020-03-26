@@ -92,6 +92,7 @@
 							</figcaption>
 						</figure>
 						<h4><a :href="'/item?id='+item.id">{{item.name}}</a></h4>
+            	<h4><a :href="'/editgood?id='+item.id">修改商品</a></h4>
 						<p><span class="emphasis">{{item.price}}</span></p>
 
 

@@ -68,16 +68,21 @@
           </td>
            <td style="padding: 5px">
           <input type="file" id="ssss">
-             
+
            </td>
         </tr>
 <tr>
           <td style="padding: 5px">
-            商品视频:
+            商品标签:
           </td>
            <td style="padding: 5px">
-          <input type="file" id="video">
-             
+
+  <div>
+
+    <TagInput v-model="mytag" type="string" split="," placeholder="please input"></TagInput>
+  </div>
+
+
            </td>
         </tr>
 
@@ -130,6 +135,7 @@ export default {
       size:'',
       price:'',
       cate_id:'',
+      mytag:''
     }
   },
   components:{
@@ -137,29 +143,20 @@ export default {
   },
   mounted:function(){
 // 获取uptoken调用函数
-    this.get_uptoken();
+
 
 
 
 },
   methods:{
-   // #获取七牛云凭证
-    get_uptoken(){
-	        this.axios.get('http://127.0.0.1:8000/uptoken/').then((result) =>{
-			console.log(result);
-				// 赋值操作
-            this.uptoken=result.data.token
 
-			}
-		)
-
-    },
     submit:function () {
+      console.log(this.mytag)
       if(this.name==''){
         this.$Message('商品名称不能为空不能为空');
         return false;
       }
-            var parms = {};
+             var parms = {};
              parms['color'] = this.color
              parms['size'] = this.size;
 
@@ -169,47 +166,62 @@ export default {
             parms = JSON.stringify(parms);
 
 
-           console.log(params);
-       //从字符串转回json-->
-      // parms = JSON.parse(parms);
-      // console.log(parms)
+            console.log(parms);
+           //从字符串转回json-->
+          // parms = JSON.parse(parms);
+          // console.log(parms)
           var image =document.getElementById('ssss').files[0];
-         var video =document.getElementById('video').files[0];
+
           let new_form = new FormData()
 
 
 
 
-      new_form.append('name', this.name)
-      new_form.append('desc', this.desc)
-      new_form.append('parms', parms)
+           new_form.append('name', this.name)
+           new_form.append('desc', this.desc)
+           new_form.append('parms', parms)
 
-      new_form.append('price', this.price)
-      new_form.append('cate_id', this.cate_id)
-      new_form.append('img', image)
-      new_form.append('video', video)
-
-      
+           new_form.append('price', this.price)
+           new_form.append('cate_id', this.cate_id)
+           new_form.append('img', image)
 
 
-      }).then(res => {
-        this.$Message(res.data.message)
-     let param = new FormData();
-       param.append('file', video);
-// 定制化axios
-        const axios_qiniu=this.axios.create({withCredentials:false})
-  axios_qiniu({
-          method: 'POST',
-          url:'http://up-z1.qiniu.com/',
-          data:param,
+
+
+
 
        axios({
         url: 'http://127.0.0.1:8000/insertgoods/',
         method:'post',
-        data: new_form, })
+        data: new_form, }).then((result)=>{
+          alert('添加成功')
+          alert(result.data.id)
+
+          if(result.data.id){
+
+             let new_form1 = new FormData()
+             new_form1.append('id', result.data.id)
+             new_form1.append('tags', this.mytag)
+
+             axios({
+              url: 'http://127.0.0.1:8000/inserttags/',
+              method:'post',
+              data:new_form1}).then((result)=>{
+               this.$Message('标签添加成功')
 
 
-      })
+
+
+       })
+
+          }
+
+
+
+       })
+
+
+
 
 
 
