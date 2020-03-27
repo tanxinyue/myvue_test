@@ -65,7 +65,7 @@
 						</td>
 						<td style="padding:5px;">
 
-							<quill-editor ref="myTextEditor" :content="content" v-model="desc"></quill-editor>
+							<quill-editor ref="myTextEditor" :content="content" v-model="desc" @change="editchange($event)"></quill-editor>
 
 
 						</td>
@@ -206,15 +206,13 @@ export default {
 
   },
   methods:{
-    // 去除html标签
-    distag:function(con){
-      return con.replace(/<[^>]+>/g, "")
+    // 编辑器更改方法
+    editchange:function(editor,html,text){
+      this.desc=html
+      console.log(this.desc)
+
     },
-
-
-
-
-  	//提交
+    //提交
   	submit:function(){
       //拼接商品规格
       var parms = {};
@@ -229,7 +227,7 @@ export default {
 
 
       //发送请求
-      this.axios.get('http://127.0.0.1:8000/upgoods/',{params:{name:this.name,content:this.distag(this.desc),parms:parms,price:this.price,cate_id:this.cate_id}}).then((result) =>{
+      this.axios.get('http://127.0.0.1:8000/upgoods/',{params:{name:this.name,parms:parms,price:this.price,cate_id:this.cate_id,id:this.id}}).then((result) =>{
 
               console.log(result);
 
@@ -306,5 +304,14 @@ export default {
 
 
 </script>
+<style>
+  .ql-editor{
+    height: 300px;
+
+
+
+
+  }
+</style>
 
 
