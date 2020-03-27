@@ -302,7 +302,6 @@ export default {
       window.location.href=data.link
 
     },
-      //分页器事件
 
   // 分页器事件
     change:function () {

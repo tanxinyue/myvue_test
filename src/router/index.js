@@ -18,6 +18,8 @@ import UpdatePics from "../components/UpdatePics";
 import Kaoshi02 from "../components/Kaoshi02";
 import Addgoods from "../components/Addgoods";
 import editgoods from "../components/editgoods";
+import KaoshiAddgoods from "../components/KaoshiAddgoods";
+import kaoshigoodslist from "../components/kaoshigoodslist";
 
 
 Vue.use(Router)
@@ -113,6 +115,14 @@ routes = [
      path:'/editgood',
       name:'editgoods',
       component:editgoods
+    },{
+     path:'/kaoshiaddgoods',
+      name:'KaoshiAddgoods',
+      component:KaoshiAddgoods
+    },{
+     path:'/ksgoodslist',
+      name:'kaoshigoodslist',
+      component:kaoshigoodslist
     }
 
 
