@@ -48,6 +48,70 @@
 	</section>
 
 	<div class="divider"></div>
+    <section class="products text-center">
+		<div class="container">
+      <textarea name="" id="" cols="30" rows="10" v-model="content"></textarea>
+      <br>
+      <Button color="blue" @click="comment">点击评论</Button>
+
+	<div class="divider" style="background: black"></div>
+ <p v-show="content_list" v-for="content in content_list">{{content.content}},{{content.create_time}}</p>
+	<div class="divider" style="background: black"></div>
+
+			<div class="row">
+				<div class="col-sm-6 col-md-3 col-product">
+					<figure>
+						<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
+						<figcaption>
+							<div class="thumb-overlay"><a href="#" title="More Info">
+								<i class="fas fa-search-plus"></i>
+							</a></div>
+						</figcaption>
+					</figure>
+					<h4><a href="#">Product Name</a></h4>
+					<p><span class="emphasis">$19.00</span></p>
+				</div>
+				<div class="col-sm-6 col-md-3 col-product">
+					<figure>
+						<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
+						<figcaption>
+							<div class="thumb-overlay"><a href="#" title="More Info">
+								<i class="fas fa-search-plus"></i>
+							</a></div>
+						</figcaption>
+					</figure>
+					<h4><a href="#">Product Name</a></h4>
+					<p><span class="emphasis">$19.00</span></p>
+				</div>
+				<div class="col-sm-6 col-md-3 col-product">
+					<figure>
+						<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
+						<figcaption>
+							<div class="thumb-overlay"><a href="#" title="More Info">
+								<i class="fas fa-search-plus"></i>
+							</a></div>
+						</figcaption>
+					</figure>
+					<h4><a href="#">Product Name</a></h4>
+					<p><span class="emphasis">$19.00</span></p>
+				</div>
+				<div class="col-sm-6 col-md-3 col-product">
+					<figure>
+						<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
+						<figcaption>
+							<div class="thumb-overlay"><a href="#" title="More Info">
+								<i class="fas fa-search-plus"></i>
+							</a></div>
+						</figcaption>
+					</figure>
+					<h4><a href="#">Product Name</a></h4>
+					<p><span class="emphasis">$19.00</span></p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div class="divider"></div>
+
 
 	<section class="products text-center">
 		<div class="container">
@@ -138,7 +202,9 @@ export default {
       size:'',
       season:'',
       img:'',
-      src:''
+      src:'',
+      content:'',
+      content_list:[]
     }
   },
   //注册组件标签
@@ -157,11 +223,25 @@ export default {
 
   	//调用接口
   	this.getdata();
+  	this.getcontent()
 
 
 
 },
   methods:{
+    //评论方法
+    comment:function(){
+       		//发送请求
+      this.axios.post('http://127.0.0.1:8000/insertcommet/',this.qs.stringify({content:this.content,uid:localStorage.getItem('uid'),gid:this.id})).then((result) =>{
+
+            this.$Message(result.data.message)
+             this.getcontent()
+
+      });
+
+
+
+    },
 
   	//商品信息接口
   	getdata:function(){
@@ -194,7 +274,18 @@ export default {
 
 
 
-  	}
+  	},
+    getcontent:function () {
+       		//发送请求
+      this.axios.get('http://127.0.0.1:8000/showcomment/',{params:{id:this.id}}).then((result) =>{
+
+            console.log(result.data)
+            this.content_list=result.data
+
+      });
+
+
+    }
 
 
   }
