@@ -55,7 +55,12 @@
       <Button color="blue" @click="comment">点击评论</Button>
 
 	<div class="divider" style="background: black"></div>
- <p v-show="content_list" v-for="content in content_list">{{content.content}},{{content.create_time}}</p>
+ <p v-show="content_list" v-for="content in content_list">{{content.uid | myfilter}}:{{content.content}},{{content.create_time}}</p>
+       <br>
+          <div>
+            <Pagination v-model="pagination" @change="change"></Pagination>
+          </div>
+
 	<div class="divider" style="background: black"></div>
 
 			<div class="row">
@@ -204,7 +209,31 @@ export default {
       img:'',
       src:'',
       content:'',
-      content_list:[]
+      content_list:[],
+      //用户信息字典
+      user_list:{},
+        pagination:{
+        page:1,
+        size:3,
+        total:5
+      },
+
+    }
+  },
+    //在渲染之前定义that变量
+  beforeCreate() {
+    window.that=this;
+  },
+  //自定义过滤器
+  filters:{
+    //自定义方法
+    myfilter:function (value) {
+      //通过key(用户id)获取用户名
+
+
+      return window.that.user_list[value]
+
+
     }
   },
   //注册组件标签
@@ -213,7 +242,9 @@ export default {
   		myheader
 
   },
+
   mounted:function(){
+
 
   	//接收商品id
   	var id = this.$route.query.id;
@@ -223,19 +254,56 @@ export default {
 
   	//调用接口
   	this.getdata();
-  	this.getcontent()
+  	this.getcontent();
+      // 请求商品接口
+
+  	//调用用户列表
+  	this.get_user();
 
 
 
 },
   methods:{
+
+        change:function () {
+	     // 请求商品接口
+    this.axios.get('http://127.0.0.1:8000/pagelist/',{params:{page:this.pagination.page,size:this.pagination.size,id:this.id}}).then((result) =>{
+      console.log(result)
+      this.content_list=result.data.data;
+    })
+    },
+
+    get_user:function(){
+          this.axios.get('http://127.0.0.1:8000/userlist/').then((result) =>{
+
+         console.log(result.data)
+            //动态赋值
+            for(let i=0,l=result.data.length;i<l;i++){
+              this.user_list[result.data[i].id]=result.data[i].username
+
+
+            }
+            console.log(this.user_list)
+
+
+      });
+
+
+},
     //评论方法
     comment:function(){
        		//发送请求
       this.axios.post('http://127.0.0.1:8000/insertcommet/',this.qs.stringify({content:this.content,uid:localStorage.getItem('uid'),gid:this.id})).then((result) =>{
 
             this.$Message(result.data.message)
-             this.getcontent()
+             if(result.data.code==200){
+               //将评论内容和作者实时填充到评论容器中
+             this.content_list.unshift({'uid':localStorage.getItem('uid'),'content':this.content})
+               this.content=''
+
+
+             }
+
 
       });
 
@@ -276,13 +344,17 @@ export default {
 
   	},
     getcontent:function () {
-       		//发送请求
-      this.axios.get('http://127.0.0.1:8000/showcomment/',{params:{id:this.id}}).then((result) =>{
-
-            console.log(result.data)
-            this.content_list=result.data
-
-      });
+      //  		//发送请求
+      // this.axios.get('http://127.0.0.1:8000/showcomment/',{params:{id:this.id}}).then((result) =>{
+      //
+      //       console.log(result.data)
+      //       this.content_list=result.data
+      //
+      // });
+      this.axios.get('http://127.0.0.1:8000/pagelist/',{params:{page:1,size:3,id:this.id}}).then((result) =>{
+      console.log(result)
+      this.content_list=result.data.data;
+    });
 
 
     }
