@@ -42,10 +42,20 @@
 
 					<!--Quantity: <input type="text" class="form-control quantity mb-4" name="" value="1">-->
 
-					<a href="#" class="btn btn-full-width btn-lg btn-outline-primary">Add to cart</a></div>
-			</div>
+					<a href="#" class="btn btn-full-width btn-lg btn-outline-primary">Add to cart</a>
+          <br>
+          <br>
+          <Button color="blue" @click="userflow">收藏该商品</Button>
+        </div>
+      </div>
 		</div>
 	</section>
+    <div class="divider"></div>
+    <div align="center">
+<!--      展示关注人数和关注用户-->
+    <p>关注人数:{{count}}</p>
+    <p v-for="people in people_list">{{people.username}}</p>
+      </div>
 
 	<div class="divider"></div>
     <section class="products text-center">
@@ -210,6 +220,8 @@ export default {
       src:'',
       content:'',
       content_list:[],
+      people_list:[],
+      count:0,
       //用户信息字典
       user_list:{},
         pagination:{
@@ -259,11 +271,42 @@ export default {
 
   	//调用用户列表
   	this.get_user();
+  	this.flowshowpeople();
 
 
 
 },
   methods:{
+    //展示关注人的数量和用户名称
+    flowshowpeople:function(){
+            this.axios.get('http://127.0.0.1:8000/peopleflow/',{params:{gid:this.id}}).then((result) =>{
+
+               this.people_list=result.data
+              for(let i=0,l=result.data.length;i<l;i++){
+                this.count++
+
+              }
+
+
+      });
+
+
+    },
+    //收藏该商品
+    userflow:function(){
+           		//发送请求
+      this.axios.get('http://127.0.0.1:8000/goodflow/',{params:{gid:this.id,uid:localStorage.getItem('uid')}}).then((result) =>{
+
+            if(result.data.code==200){
+              this.$Message(result.data.message)
+            }else{
+               this.$Message(result.data.message)
+
+            }
+
+      });
+
+    },
 
         change:function () {
 	     // 请求商品接口
