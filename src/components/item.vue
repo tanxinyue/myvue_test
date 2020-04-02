@@ -46,6 +46,7 @@
           <br>
           <br>
           <Button color="blue" @click="userflow">收藏该商品</Button>
+          <Button color="blue" @click="disflow">取消关注该商品</Button>
         </div>
       </div>
 		</div>
@@ -64,8 +65,10 @@
       <br>
       <Button color="blue" @click="comment">点击评论</Button>
 
+
 	<div class="divider" style="background: black"></div>
- <p v-show="content_list" v-for="content in content_list">{{content.uid | myfilter}}:{{content.content}},{{content.create_time}}</p>
+            <comments :content_list="this.content_list" :myuser="this.user_list"></comments>
+
        <br>
           <div>
             <Pagination v-model="pagination" @change="change"></Pagination>
@@ -203,6 +206,7 @@
 
 //导包
 import myheader from './myheader.vue';
+import comments from './comments.vue';
 
 export default {
   data () {
@@ -251,7 +255,8 @@ export default {
   //注册组件标签
   components:{
 
-  		myheader
+  		myheader,
+      comments
 
   },
 
@@ -277,6 +282,34 @@ export default {
 
 },
   methods:{
+    //将关注人数和商品id存储到redis
+    redisflowcount:function(){
+           this.axios.get('http://127.0.0.1:8000/redisflow/',{params:{gid:this.id,count:this.count}}).then((result) =>{
+
+      });
+
+    },
+
+      //展示取消后的关注人的数量和用户名称
+    disflowshowpeople:function(){
+            this.axios.get('http://127.0.0.1:8000/peopleflow/',{params:{gid:this.id}}).then((result) =>{
+
+               this.people_list=result.data
+              for(let i=0,l=result.data.length;i<=l;i++){
+                this.count--
+
+                if(this.count===0){
+                  this.count=0
+                }
+
+              }
+              this.redisflowcount()
+
+
+      });
+
+
+    },
     //展示关注人的数量和用户名称
     flowshowpeople:function(){
             this.axios.get('http://127.0.0.1:8000/peopleflow/',{params:{gid:this.id}}).then((result) =>{
@@ -285,13 +318,34 @@ export default {
               for(let i=0,l=result.data.length;i<l;i++){
                 this.count++
 
+
               }
+              this.redisflowcount()
 
 
       });
 
 
     },
+      //取消该商品
+    disflow:function(){
+           		//发送请求
+      this.axios.get('http://127.0.0.1:8000/disflow/',{params:{gid:this.id,uid:localStorage.getItem('uid')}}).then((result) =>{
+
+            if(result.data.code==200){
+               this.$Message(result.data.message)
+               this.disflowshowpeople()
+
+
+            }else{
+               this.$Message(result.data.message)
+
+            }
+
+      });
+
+    },
+
     //收藏该商品
     userflow:function(){
            		//发送请求
@@ -299,6 +353,8 @@ export default {
 
             if(result.data.code==200){
               this.$Message(result.data.message)
+              this.flowshowpeople();
+
             }else{
                this.$Message(result.data.message)
 
