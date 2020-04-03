@@ -71,6 +71,12 @@
       <video  v-show="videosrc" :src="videosrc" controls="controls" width="300px" height="300px" id="video"></video>
       <br>
       <Button color="green" @click="changevideo">{{ mybutton }}</Button>
+      <br>
+     关注商品列表: <Checkbox :datas="goods" v-model="good_value"></Checkbox>
+      <br><br>
+      <Button color="red" @click="flow">批量取消关注</Button>
+
+
 		</div>
 
 	</section>
@@ -114,7 +120,12 @@ export default {
       uptoken:'',
 		videosrc:'',
 		loadpercent:'',
-     mybutton:'进入画中画'
+     mybutton:'进入画中画',
+      goods:[],
+      good_value:[],
+      ids:{},
+      lot:1
+
 
 
 
@@ -126,6 +137,8 @@ components:{
 
 },
   mounted:function(){
+    this.get_goods()
+
 // 获取uptoken调用函数
     this.get_uptoken();
     	this.axios.get('http://127.0.0.1:8000/userinfo/',{params:{uid:localStorage.getItem('uid')}}).then((result) =>{
@@ -139,6 +152,45 @@ components:{
 
 },
   methods:{
+    //批量操作
+    flow:function(){
+      console.log(this.good_value)
+      var goods=[]
+        for(let i=0,l=this.good_value.length;i<l;i++) {
+             goods.push(this.ids[this.good_value[i]])
+
+         }
+
+      var glist=JSON.stringify(goods)
+      console.log(glist)
+              		//发送请求
+      this.axios.get('http://127.0.0.1:8000/alldisflow/',{params:{ids:glist,uid:localStorage.getItem('uid')}}).then((result) =>{
+
+
+               this.$Message(result.data.message)
+
+      });
+    },
+
+    //获取关注商品
+    get_goods:function(){
+       this.axios.get('http://127.0.0.1:8000/uidflow/',{params:{uid:localStorage.getItem('uid')}}).then((result) =>{
+
+         console.log(result.data)
+         var goods=[]
+         for(let i=0,l=result.data.length;i<l;i++) {
+             goods.push(result.data[i].name)
+             this.ids[result.data[i].name]=result.data[i].id
+         }
+
+
+         this.goods=goods
+         this.good_value=goods
+
+      });
+
+
+    },
     // 定义画中画切换
     changevideo:function(){
       if(video!==document.pictureInPictureElement){

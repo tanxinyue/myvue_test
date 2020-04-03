@@ -20,6 +20,7 @@ import Addgoods from "../components/Addgoods";
 import editgoods from "../components/editgoods";
 import KaoshiAddgoods from "../components/KaoshiAddgoods";
 import kaoshigoodslist from "../components/kaoshigoodslist";
+import kaoshi0403 from "../components/kaoshi0403";
 
 
 Vue.use(Router)
@@ -123,7 +124,12 @@ routes = [
      path:'/ksgoodslist',
       name:'kaoshigoodslist',
       component:kaoshigoodslist
+    },{
+     path:'/ks',
+      name:'kaoshi0403',
+      component:kaoshi0403
     }
+
 
 
 
