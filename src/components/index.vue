@@ -27,7 +27,6 @@
 <!--						</div>-->
 <!--					</div>-->
 <!--				</div>-->
-3
 <!--        幻灯片组件-->
             <Carousel :height="700" :datas="params" @click="click" pageTheme="cricle"></Carousel>
 
@@ -74,6 +73,15 @@
 				</div>
 			</div>
 		</section>
+<!--    商品排行榜-->
+
+	<div class="top-10">
+    <h1>商品排行榜</h1>
+			<ul>
+				<li v-for="top in top_list"><a :href="'/item?id='+top.id">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img :src="'http://127.0.0.1:8000/static/upload/'+top.img+''" style="width:50px;height:50px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{top.name}}&nbsp</a></li>
+
+			</ul>
+  </div>
 
 		<section class="products text-center">
 			<div class="container">
@@ -109,24 +117,24 @@
             <Pagination v-model="pagination" @change="change"></Pagination>
           </div>
           <br>
-        <!--自主分页-->
-        <br /><br />
-					<div>
+<!--        &lt;!&ndash;自主分页&ndash;&gt;-->
+<!--        <br /><br />-->
+<!--					<div>-->
 
-						<a @click="getdata(lastpage)" v-show="lastpage"  >上一页</a>
+<!--						<a @click="getdata(lastpage)" v-show="lastpage"  >上一页</a>-->
 
-						<ul>
+<!--						<ul>-->
 
-							<li v-for="index in all">
+<!--							<li v-for="index in all">-->
 
-								<a @click="getdata(index)"  >{{ index }}</a>
+<!--								<a @click="getdata(index)"  >{{ index }}</a>-->
 
-							</li>
+<!--							</li>-->
 
-						</ul>
+<!--						</ul>-->
 
-						<a @click="getdata(nextpage)" v-show="nextpage" >下一页</a>
-</div>
+<!--						<a @click="getdata(nextpage)" v-show="nextpage" >下一页</a>-->
+<!--</div>-->
 
 
 
@@ -176,6 +184,7 @@ export default {
     return {
 	  msg: "这是一个变量",
 	  username: '',
+      top_list:[],//排行榜列表
       datalist:[],
        //自主分页
       total:0,//商品总数
@@ -184,6 +193,7 @@ export default {
       lastpage:0,//上一页
       nextpage:0,//下一页
       size:2,
+      color:'blue',
 
       // 幻灯片数据
       params:[
@@ -210,8 +220,20 @@ export default {
 	'myheader': myheader,
 
 },
+   //自定义过滤器
+  filters:{
+    //自定义方法
+    myfilter:function (value) {
+      //通过key(用户id)获取用户名
+
+
+      return value
+
+    }
+  },
   mounted:function(){
-    this.getdata(1);
+    this.top_rank(); //每次访问调用商品排行榜路由
+    // this.getdata(1);
 
       //请求商品接口
       // 发送请求
@@ -250,47 +272,57 @@ export default {
 
 },
   methods:{
-    // 自主分页接口
-    //自主分页接口
-  	getdata:function(mypage){
+    //展示商品排行榜
+    top_rank:function(){
+             this.axios.get('http://127.0.0.1:8000/goodrank/').then((result) =>{
+               console.log(result.data)
+               this.top_list=result.data
 
-
-  		//发送请求
-      this.axios.get('http://127.0.0.1:8000/goodslist/',{params:{page:mypage,size:this.size}}).then((result) =>{
-
-              console.log(result);
-              this.datalist = result.data.data;
-
-              //判断上一页
-              if(mypage==1){
-
-              	this.lastpage = 0;
-
-              }else{
-
-              	this.lastpage = mypage - 1;
-
-              }
-
-              //计算总页数
-              this.all = Math.ceil(result.data.total / this.size);
-
-              //判断下一页
-              if(mypage==this.all){
-
-              	this.nextpage = 0;
-
-              }else{
-
-              	this.nextpage = mypage + 1;
-
-              }
 
       });
 
-
-
-  	},
+    },
+    // 自主分页接口
+    //自主分页接口
+  	// getdata:function(mypage){
+    //
+    //
+  	// 	//发送请求
+    //   this.axios.get('http://127.0.0.1:8000/goodslist/',{params:{page:mypage,size:this.size}}).then((result) =>{
+    //
+    //           console.log(result);
+    //           this.datalist = result.data.data;
+    //
+    //           //判断上一页
+    //           if(mypage==1){
+    //
+    //           	this.lastpage = 0;
+    //
+    //           }else{
+    //
+    //           	this.lastpage = mypage - 1;
+    //
+    //           }
+    //
+    //           //计算总页数
+    //           this.all = Math.ceil(result.data.total / this.size);
+    //
+    //           //判断下一页
+    //           if(mypage==this.all){
+    //
+    //           	this.nextpage = 0;
+    //
+    //           }else{
+    //
+    //           	this.nextpage = mypage + 1;
+    //
+    //           }
+    //
+    //   });
+    //
+    //
+    //
+  	// },
 	logout(){
 		localStorage.removeItem('username')
     	this.username=null;
@@ -322,6 +354,64 @@ export default {
 
 <style>
 
+a {
+			color: #525C66;
+			text-decoration: none;
+		}
+        <!-- div 大小设定 -->
+		.top-10 {
+			/*float: left;*/
+			width: 340px;
+      margin-top:106px;
+			margin-left:118px;
+			background: #fff;
+			border: 1px solid #FFF;
+			box-shadow: #d0d0d0 1px 1px 10px 0px;
+		}
+
+		.top-10 ul {
+			counter-reset: section;
+		}
+
+		.top-10 li {
+			width: 260px;
+			border-bottom: 1px solid #b8c2cc;
+			line-height: 46px;
+			height: 46px;
+			overflow: hidden;
+			color: #525C66;
+			font-size: 14px;
+
+		}
+
+		.top-10 li:before {
+			counter-increment: section;
+			content: counter(section);
+			display: inline-block;
+			padding: 0 12px;
+			margin-right: 10px;
+			height: 18px;
+			line-height: 18px;
+			background: #b8c2cc;
+			color: #fff;
+			border-radius: 3px;
+			font-size: 9px
+		}
+        <!-- 排名前三名颜色控制 -->
+    .top-10 li:nth-child(0):before {
+          background:#F00
+        }
+		.top-10 li:nth-child(1):before {
+			background:#F00
+		}
+
+		.top-10 li:nth-child(2):before {
+			background:#F00
+		}
+
+		.top-10 li:nth-child(3):before {
+			background:#F00
+		}
 
 
 </style>

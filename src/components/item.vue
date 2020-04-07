@@ -277,6 +277,7 @@ export default {
   	//调用用户列表
   	this.get_user();
   	this.flowshowpeople();
+    this.redisflowcount();
 
 
 
@@ -284,7 +285,7 @@ export default {
   methods:{
     //将关注人数和商品id存储到redis
     redisflowcount:function(){
-           this.axios.get('http://127.0.0.1:8000/redisflow/',{params:{gid:this.id,count:this.count}}).then((result) =>{
+           this.axios.get('http://127.0.0.1:8000/goodclick/',{params:{id:this.id}}).then((result) =>{
 
       });
 
@@ -303,7 +304,7 @@ export default {
                 }
 
               }
-              this.redisflowcount()
+
 
 
       });
@@ -320,7 +321,7 @@ export default {
 
 
               }
-              this.redisflowcount()
+
 
 
       });

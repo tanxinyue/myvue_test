@@ -22,6 +22,7 @@ import KaoshiAddgoods from "../components/KaoshiAddgoods";
 import kaoshigoodslist from "../components/kaoshigoodslist";
 import kaoshi04 from "../components/kaoshi04";
 import kaoshiitem from "../components/kaoshiitem";
+import search from "../components/search";
 
 
 Vue.use(Router)
@@ -32,6 +33,11 @@ routes = [
     path: '/',
     name: 'index',
     component: index
+  },
+    {
+    path: '/search',
+    name: 'search',
+    component: search
   },
   {
     path: '/cart',

@@ -86,7 +86,10 @@
                                 </div>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="contact.html">{{$t('m.Contact')}}</a></li>
-                        <li class="nav-item dropdown"><input type="text" /></li>
+                        <li class="nav-item dropdown">
+<!--                          检索功能-->
+                          <Search @search="search" v-model="text" placeholder="查询码/标题"></Search>
+                        </li>
                             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i> <span class="badge badge-pill badge-primary">3</span></a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-cart" aria-labelledby="navbarDropdown">
                                     <h6>3 Items <span class="emphasis">$147.00</span></h6>
@@ -147,7 +150,8 @@
         msg: "这是一个变量",
         username: '',
           // 语言变量
-          language:false
+          language:false,
+          text:''
         }
     },
     mounted:function(){
@@ -190,6 +194,11 @@
 
 },
   methods:{
+      search:function(){
+        //跳转
+        this.$router.push({'path':'/search',query:{word:this.text}})
+
+      },
 	logout(){
 		localStorage.removeItem('username')
     	this.username=null;
