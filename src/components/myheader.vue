@@ -1,6 +1,6 @@
 
 <template>
-    <div>
+  <div>
         <section class="header text-center">
             <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
                 <div class="container"><a class="navbar-brand"  @click="changeLocale"><i class="fas fa-shopping-bag primary-color mr-1" ></i>{{$t('m.name')}}</a>
@@ -88,7 +88,11 @@
                             <li class="nav-item"><a class="nav-link" href="contact.html">{{$t('m.Contact')}}</a></li>
                         <li class="nav-item dropdown">
 <!--                          检索功能-->
-                          <Search @search="search" v-model="text" placeholder="查询码/标题"></Search>
+<!--                          <Search @search="search" v-model="text" placeholder="查询码/标题"></Search>-->
+
+<!--                          智能搜索提示-->
+                         <div v-width="300"><AutoComplete  @keyup.enter.native="search" :option="param" v-model="text" @change="onChange" type="title" :must-match="false"></AutoComplete></div>
+                          <br>
                         </li>
                             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i> <span class="badge badge-pill badge-primary">3</span></a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-cart" aria-labelledby="navbarDropdown">
@@ -144,6 +148,21 @@
 </template>
 
 <script>
+
+
+  import jsonp from 'fetch-jsonp';
+
+const loadData = function (filter, callback) {
+  // this 为 option 配置
+  // this.orgId 使用传递的参数获取数据，例：搜索某公司下的员工
+  jsonp(`https://suggest.taobao.com/sug?code=utf-8&q=${filter}`)
+    .then(response => response.json())
+    .then((d) => {
+      callback(d.result.map((r) => {
+        return r[0];
+      }));
+    });
+};
     export default {
     data () {
         return {
@@ -151,7 +170,12 @@
         username: '',
           // 语言变量
           language:false,
-          text:''
+          text:'',
+      param: {
+        orgId: 1, // 自定义参数传递
+        loadData,
+        minWord: 1
+      }
         }
     },
     mounted:function(){
@@ -194,7 +218,10 @@
 
 },
   methods:{
-      search:function(){
+        onChange(data, trigger) {
+          console.log(data, trigger);
+        },
+       search:function(){
         //跳转
         this.$router.push({'path':'/search',query:{word:this.text}})
 

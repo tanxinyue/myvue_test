@@ -12,6 +12,7 @@
 
 			<table border="1px">
         <tr>
+          <td>商品排行榜</td>
           <td>商品图片</td>
           <td>商品名称</td>
           <td>商品描述</td>
@@ -19,8 +20,9 @@
           <td>详情页</td>
         </tr>
 
-        <tr v-for="good in good_list">
-          <td><a :href="'/item?id='+good.id"><img :src="' http://127.0.0.1:8000/static/upload/'+good.img+''"	width="100" height="100"></a></td>
+        <tr v-for="(good,index) in good_list">
+          <td>{{index+1}}</td>
+          <td><a :href="'/item?id='+good.id" target="_blank"><img :src="' http://127.0.0.1:8000/static/upload/'+good.img+''"	width="100" height="100"></a></td>
           <td>
             <a :href="'/item?id='+good.id">{{good.name}}</a>
           </td>
@@ -67,19 +69,28 @@
 <script>
   import myheader from "./myheader";
   import axios from "axios";
-
 export default {
   data () {
     return {
       msg: "这是一个变量",
       datas:[{title:'首页',route:{name:'index'}},{title:'商品检索',route:{name:'search'}}],
       word:'',
-      good_list:[]
+      good_list:[],
 
     }
   },
   components:{
     'myheader':myheader
+  },
+  //监听属性
+  watch:{
+    $route(to,from){
+     this.$router.go(0)
+
+
+
+    }
+
   },
   mounted:function(){
     //接受参数
@@ -94,13 +105,21 @@ export default {
 },
   methods:{
     submit:function () {
-               this.axios.get('http://127.0.0.1:8000/search/',{params:{word:this.word}}).then((result) =>{
-                 this.good_list=result.data
-                 console.log(result.data)
+              if(this.word!=''){
+                 this.axios.get('http://127.0.0.1:8000/search/',{params:{word:this.word}}).then((result) =>{
+                 this.good_list=result.data;
+                   if(this.good_list.length==0){
+                     this.$Message('暂时没有您需要的商品')
+
+                   }
+
 
 
 
       });
+
+
+              }
 
 
 
